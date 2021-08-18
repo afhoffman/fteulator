@@ -1,1 +1,6 @@
 // app global css in SCSS form
+
+body.body--dark {
+  // background-color: rgb(41, 41, 41);
+  background-color: $grey-4;
+}
