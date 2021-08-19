@@ -1,9 +1,9 @@
 <template>
   <q-layout view="hHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar class="bg-grey-8">
+      <!-- <q-toolbar class="bg-grey-8">
         <q-toolbar-title> FTEUlator </q-toolbar-title>
-      </q-toolbar>
+      </q-toolbar> -->
     </q-header>
 
     <q-page-container>

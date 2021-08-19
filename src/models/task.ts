@@ -3,3 +3,6 @@ export interface Task {
   hrs: number;
   repeatFrequency: 'day' | 'week' | 'month';
 }
+export interface ResultTask extends Task {
+  fteSubtotal: number;
+}

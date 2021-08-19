@@ -9,7 +9,10 @@
       <q-card-section>
         <q-form>
           <q-input v-model="newTask.name" label="Name" />
-          <q-input v-model="newTask.hrs" label="hours" />
+          <div class="row justify-between">
+            <q-input v-model="hrs" type="number" label="hours" />
+            <q-input v-model="mins" type="number" label="minutes" />
+          </div>
           <q-select
             label="per"
             :options="dateOptions"
@@ -45,6 +48,8 @@ export default defineComponent({
 
   setup() {
     const newTask = ref<Partial<Task>>({});
+    const hrs = ref<string>('0');
+    const mins = ref<string>('0');
 
     // REQUIRED; must be called inside of setup()
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
@@ -66,6 +71,8 @@ export default defineComponent({
       // other methods that we used in our vue html template;
       // these are part of our example (so not required)
       onOKClick() {
+        newTask.value.hrs = parseFloat(hrs.value) + parseFloat(mins.value) / 60;
+        newTask.value.hrs = parseFloat(newTask.value.hrs.toPrecision(3));
         console.log(newTask.value);
         // on OK, it is REQUIRED to
         // call onDialogOK (with optional payload)
@@ -78,6 +85,8 @@ export default defineComponent({
       onCancelClick: onDialogCancel,
       newTask,
       dateOptions,
+      hrs,
+      mins,
     };
   },
 });
