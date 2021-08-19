@@ -33,7 +33,7 @@ import { defineComponent, ref } from 'vue';
 import { useDialogPluginComponent } from 'quasar';
 import { Task } from 'src/models/task';
 
-const dateOptions = ['day', 'week', 'month'];
+const dateOptions = ['day', 'week', 'month', 'year', 'sprint'];
 
 export default defineComponent({
   props: {
@@ -47,7 +47,7 @@ export default defineComponent({
   ],
 
   setup() {
-    const newTask = ref<Partial<Task>>({});
+    const newTask = ref<Partial<Task>>({ repeatFrequency: 'day' });
     const hrs = ref<string>('0');
     const mins = ref<string>('0');
 
