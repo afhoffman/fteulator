@@ -8,15 +8,20 @@
         <q-card-section class="q-mt-none q-pt-none">
           <q-input label="Project Title" v-model="projectTitle" />
           <div class="row items-center">
-            <div class="col">
+            <div class="col q-mr-sm">
               <q-input
                 label="Project Duration"
                 type="number"
+                hide-bottom-space
                 v-model="taskDuration"
               />
             </div>
-            <div class="col">
-              <q-select :options="durationOptions" v-model="taskDurationMeta" />
+            <div class="col q-ml-sm">
+              <q-select
+                label-slot
+                :options="durationOptions"
+                v-model="taskDurationMeta"
+              />
             </div>
           </div>
         </q-card-section>
