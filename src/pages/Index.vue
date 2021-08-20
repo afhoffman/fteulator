@@ -5,12 +5,12 @@
       <q-card class="col col-lg-4 q-mr-sm">
         <div class="text-h6 text-center q-mb-sm">FTEUlator</div>
         <q-separator class="q-mb-md" />
-        <q-card-section>
-          <q-input label="Project/duty Title" v-model="projectTitle" />
+        <q-card-section class="q-mt-none q-pt-none">
+          <q-input label="Project Title" v-model="projectTitle" />
           <div class="row items-center">
             <div class="col">
               <q-input
-                label="Task Duration"
+                label="Project Duration"
                 type="number"
                 v-model="taskDuration"
               />
