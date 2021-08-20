@@ -8,10 +8,24 @@
       <q-separator />
       <q-card-section>
         <q-form>
-          <q-input v-model="newTask.name" label="Name" />
+          <q-input
+            v-model="newTask.name"
+            @keydown.enter.prevent="onOKClick"
+            label="Name"
+          />
           <div class="row justify-between">
-            <q-input v-model="hrs" type="number" label="hours" />
-            <q-input v-model="mins" type="number" label="minutes" />
+            <q-input
+              v-model="hrs"
+              type="number"
+              @keydown.enter.prevent="onOKClick"
+              label="hours"
+            />
+            <q-input
+              v-model="mins"
+              type="number"
+              @keydown.enter.prevent="onOKClick"
+              label="minutes"
+            />
           </div>
           <q-select
             label="per"
@@ -20,9 +34,22 @@
           />
         </q-form>
       </q-card-section>
-      <q-card-actions align="right">
-        <q-btn color="primary" label="OK" @click="onOKClick" />
-        <q-btn color="primary" label="Cancel" @click="onCancelClick" />
+      <q-card-actions align="right" class="justify-between">
+        <div>
+          <q-btn
+            class="q-mr-sm"
+            color="primary"
+            label="OK"
+            @click="onOKClick"
+          />
+          <q-btn color="primary" label="Cancel" @click="onCancelClick" />
+        </div>
+        <q-btn
+          v-if="taskItem"
+          label="Delete"
+          color="negative"
+          @click="onDeleteClick"
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -38,6 +65,7 @@ const dateOptions: RepFreq[] = ['day', 'week', 'month', 'year', 'sprint'];
 export default defineComponent({
   props: {
     // ...your custom props
+    taskItem: TaskItem,
   },
 
   emits: [
@@ -46,11 +74,15 @@ export default defineComponent({
     ...useDialogPluginComponent.emits,
   ],
 
-  setup() {
+  setup(props) {
     // const newTask = ref<Partial<Task>>({ repeatFrequency: 'day' });
-    const newTask = ref(new TaskItem());
-    const hrs = ref<string>('0');
-    const mins = ref<string>('0');
+    const newTask = ref(props.taskItem ? props.taskItem : new TaskItem());
+    const hrs = ref<string>(
+      props.taskItem ? Math.floor(props.taskItem.hrs).toString() : '0'
+    );
+    const mins = ref<string>(
+      props.taskItem ? ((props.taskItem.hrs % 1) * 60).toString() : '0'
+    );
 
     // REQUIRED; must be called inside of setup()
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
@@ -73,12 +105,14 @@ export default defineComponent({
       // these are part of our example (so not required)
       onOKClick() {
         newTask.value.hrs = parseFloat(hrs.value) + parseFloat(mins.value) / 60;
-        console.log(newTask.value);
         // on OK, it is REQUIRED to
         // call onDialogOK (with optional payload)
-        onDialogOK(newTask.value);
+        onDialogOK({ newTask: newTask.value });
         // or with payload: onDialogOK({ ... })
         // ...and it will also hide the dialog automatically
+      },
+      onDeleteClick() {
+        onDialogOK({ deleteTask: true });
       },
 
       // we can passthrough onDialogCancel directly

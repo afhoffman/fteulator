@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export type RepFreq = 'day' | 'week' | 'month' | 'year' | 'sprint';
 export class TaskItem {
-  private readonly _id;
+  private readonly _id: string;
   private _repeatFreq: RepFreq = 'day';
   private _hrs = 0;
   private _totFTE = 0;
@@ -12,7 +12,6 @@ export class TaskItem {
 
   constructor() {
     this._id = uuidv4();
-    console.log(this.id);
   }
 
   public get id() {

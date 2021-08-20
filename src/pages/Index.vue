@@ -20,20 +20,6 @@
             </div>
           </div>
         </q-card-section>
-        <q-card-section>
-          <q-card-section class="q-pa-none q-ma-none" v-if="items.length">
-            <q-table
-              :rows="items"
-              :columns="listColumns"
-              hide-bottom
-              row-key="id"
-              class="q-pb-none"
-            />
-          </q-card-section>
-        </q-card-section>
-        <q-card-actions align="center">
-          <q-btn @click="addTaskDialog" label="Add Task" flat color="primary" />
-        </q-card-actions>
         <q-card-section v-if="items.length">
           <div class="row items-center justify-evenly">
             <div class="row">
@@ -46,6 +32,28 @@
             </div>
           </div>
         </q-card-section>
+        <q-card-section>
+          <q-card-section class="q-pa-none q-ma-none" v-if="items.length">
+            <q-table
+              :rows="items"
+              :columns="listColumns"
+              hide-bottom
+              row-key="id"
+              class="q-pb-none"
+              @row-click="handleRowClick"
+            />
+          </q-card-section>
+        </q-card-section>
+        <q-card-actions align="center" class="justify-center">
+          <q-btn
+            v-if="items.length"
+            @click="handleReset"
+            flat
+            color="negative"
+            label="Reset"
+          />
+          <q-btn @click="addTaskDialog" label="Add Task" flat color="primary" />
+        </q-card-actions>
       </q-card>
     </div>
   </div>
@@ -58,6 +66,14 @@ import { RepFreq, TaskItem } from 'src/models/task';
 import AddTask from 'src/components/dialogs/AddTask.vue';
 import { useQuasar } from 'quasar';
 
+const filterLowNumber = (i: number) => {
+  const interm = (Math.round(i * 1000) / 1000).toFixed(3);
+  if (parseFloat(interm)) {
+    return interm;
+  } else {
+    return '< 0.1%';
+  }
+};
 const listColumns = [
   {
     name: 'name',
@@ -71,6 +87,7 @@ const listColumns = [
     label: 'Time (hr)',
     field: 'hrs',
     sortable: true,
+    format: filterLowNumber,
   },
   {
     name: 'repeats',
@@ -84,14 +101,14 @@ const listColumns = [
     label: 'FTE',
     sortable: true,
     field: 'totFTE',
-    format: (i: number) => `${(Math.round(i * 1000) / 1000).toFixed(3)}`,
+    format: filterLowNumber,
   },
   {
     name: 'FTE - PoP',
     label: 'FTE - PoP',
     sortable: true,
     field: 'totFTEOverPoP',
-    format: (i: number) => `${(Math.round(i * 1000) / 1000).toFixed(3)}`,
+    format: filterLowNumber,
   },
 ];
 
@@ -137,11 +154,13 @@ export default defineComponent({
     });
 
     const addTaskDialog = () => {
-      $q.dialog({ component: AddTask }).onOk((newTask: TaskItem) => {
-        // Need to set current PoP when a new task is added, defaults to 1 year
-        newTask.PoP = totalTaskDuration.value;
-        items.value.push(newTask);
-      });
+      $q.dialog({ component: AddTask }).onOk(
+        ({ newTask }: { newTask: TaskItem }) => {
+          // Need to set current PoP when a new task is added, defaults to 1 year
+          newTask.PoP = totalTaskDuration.value;
+          items.value.push(newTask);
+        }
+      );
     };
 
     // Update the PoP on all the items when PoP changes
@@ -156,6 +175,32 @@ export default defineComponent({
       }
     );
 
+    const handleRowClick = (evt: unknown, row: TaskItem) => {
+      $q.dialog({ component: AddTask, componentProps: { taskItem: row } }).onOk(
+        (res: { deleteTask: boolean }) => {
+          if (res.deleteTask) {
+            items.value = items.value.filter((item) => {
+              return item.id !== row.id;
+            });
+          }
+        }
+      );
+    };
+
+    const handleReset = () => {
+      $q.dialog({
+        title: 'Confirm',
+        message: 'Are you sure you want to reset the FTEUlator?',
+        cancel: true,
+        persistent: true,
+      }).onOk(() => {
+        taskDuration.value = 1;
+        taskDurationMeta.value = durationOptions[0];
+        projectTitle.value = '';
+        items.value = [];
+      });
+    };
+
     return {
       items,
       listColumns,
@@ -166,6 +211,8 @@ export default defineComponent({
       taskDurationMeta,
       taskDuration,
       projectTitle,
+      handleRowClick,
+      handleReset,
     };
   },
 });
