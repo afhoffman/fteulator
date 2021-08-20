@@ -104,7 +104,9 @@ export default defineComponent({
       // other methods that we used in our vue html template;
       // these are part of our example (so not required)
       onOKClick() {
-        newTask.value.hrs = parseFloat(hrs.value) + parseFloat(mins.value) / 60;
+        newTask.value.hrs =
+          parseFloat(hrs.value ? hrs.value : '0') +
+          parseFloat(mins.value ? mins.value : '0') / 60;
         // on OK, it is REQUIRED to
         // call onDialogOK (with optional payload)
         onDialogOK({ newTask: newTask.value });
