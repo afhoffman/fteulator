@@ -1,21 +1,30 @@
-export interface Task {
-  name: string;
-  hrs: number;
-  repeatFrequency: 'day' | 'week' | 'month' | 'year' | 'sprint';
-}
-export interface ResultTask extends Task {
-  fteSubtotal: number;
-}
+import { v4 as uuidv4 } from 'uuid';
 
-type RepFreq = 'day' | 'week' | 'month' | 'year' | 'sprint';
-class TaskItem {
+export type RepFreq = 'day' | 'week' | 'month' | 'year' | 'sprint';
+export class TaskItem {
+  private readonly _id;
   private _repeatFreq: RepFreq = 'day';
   private _hrs = 0;
   private _totFTE = 0;
   private _totFTEOverPoP = 0;
   private _PoP = 2080;
+  private _name = '';
 
-  constructor(public name: string) {}
+  constructor() {
+    this._id = uuidv4();
+    console.log(this.id);
+  }
+
+  public get id() {
+    return this._id;
+  }
+
+  public set name(name: string) {
+    this._name = name;
+  }
+  public get name() {
+    return this._name;
+  }
 
   public set repeatFrequency(freq: RepFreq) {
     this._repeatFreq = freq;
@@ -34,6 +43,7 @@ class TaskItem {
 
   public set PoP(pop: number) {
     this._PoP = pop;
+    this.calcFTEOverPoP();
   }
 
   public get totFTE() {

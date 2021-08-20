@@ -6,6 +6,7 @@
         <div class="text-h6 text-center q-mb-sm">FTEUlator</div>
         <q-separator class="q-mb-md" />
         <q-card-section>
+          <q-input label="Project/duty Title" v-model="projectTitle" />
           <div class="row items-center">
             <div class="col">
               <q-input
@@ -20,12 +21,12 @@
           </div>
         </q-card-section>
         <q-card-section>
-          <q-card-section class="q-pa-none q-ma-none" v-if="resultItems.length">
+          <q-card-section class="q-pa-none q-ma-none" v-if="items.length">
             <q-table
-              :rows="resultItems"
+              :rows="items"
               :columns="listColumns"
               hide-bottom
-              row-key="name"
+              row-key="id"
               class="q-pb-none"
             />
           </q-card-section>
@@ -33,7 +34,7 @@
         <q-card-actions align="center">
           <q-btn @click="addTaskDialog" label="Add Task" flat color="primary" />
         </q-card-actions>
-        <q-card-section v-if="resultItems.length">
+        <q-card-section v-if="items.length">
           <div class="row items-center justify-evenly">
             <div class="row">
               <div class="text-h5">Total FTE:</div>
@@ -48,13 +49,12 @@
       </q-card>
     </div>
   </div>
-  <!-- </div> -->
 </template>
 
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue';
-import { Task, ResultTask } from 'src/models/task';
+import { RepFreq, TaskItem } from 'src/models/task';
 import AddTask from 'src/components/dialogs/AddTask.vue';
 import { useQuasar } from 'quasar';
 
@@ -83,99 +83,76 @@ const listColumns = [
     name: 'FTE',
     label: 'FTE',
     sortable: true,
-    field: 'fteSubtotal',
+    field: 'totFTE',
+    format: (i: number) => `${(Math.round(i * 1000) / 1000).toFixed(3)}`,
+  },
+  {
+    name: 'FTE - PoP',
+    label: 'FTE - PoP',
+    sortable: true,
+    field: 'totFTEOverPoP',
     format: (i: number) => `${(Math.round(i * 1000) / 1000).toFixed(3)}`,
   },
 ];
 
 type DurationOption = {
+  tag: RepFreq;
   label: string;
   numHours: number;
 };
 
 const durationOptions: DurationOption[] = [
-  { label: 'year(s)', numHours: 2080 },
-  { label: 'month(s)', numHours: 2080 / 12 },
-  { label: 'week(s)', numHours: 2080 / 52 },
-  { label: 'sprint(s)', numHours: 2080 / (52 / 2) },
+  { tag: 'year', label: 'year(s)', numHours: 2080 },
+  { tag: 'month', label: 'month(s)', numHours: 2080 / 12 },
+  { tag: 'week', label: 'week(s)', numHours: 2080 / 52 },
+  { tag: 'sprint', label: 'sprint(s)', numHours: 2080 / (52 / 2) },
+  { tag: 'day', label: 'day(s)', numHours: 8 },
 ];
 
 export default defineComponent({
   name: 'PageIndex',
   setup() {
     const $q = useQuasar();
-    const items = ref<Task[]>([]);
+    const items = ref<TaskItem[]>([]);
+    const projectTitle = ref('');
 
+    // Accept task duration params, calc total task duration in hours
     const taskDurationMeta = ref(durationOptions[0]);
     const taskDuration = ref(1);
+
     const totalTaskDuration = computed(() => {
       return taskDurationMeta.value.numHours * taskDuration.value;
     });
 
-    // const
-
-    const resultItems = computed<ResultTask[]>(() => {
-      const r: ResultTask[] = [];
-      items.value.forEach((i) => {
-        let fteSubtotal = i.hrs;
-
-        switch (i.repeatFrequency) {
-          case 'day':
-            fteSubtotal *= 5 * 52;
-            break;
-          case 'week':
-            fteSubtotal *= 52;
-            break;
-          case 'month':
-            fteSubtotal *= 12;
-            break;
-          case 'sprint':
-            fteSubtotal *= 26;
-            break;
-          default:
-            break;
-        }
-
-        fteSubtotal /= 2080;
-        fteSubtotal = parseFloat(
-          (Math.round(fteSubtotal * 100) / 100).toFixed(2)
-        );
-        r.push({ ...i, fteSubtotal });
-      });
-      return r;
-    });
-
+    // Iterate over the list of objects and sum up the totalFTE and FTEOverPoP
     const totalFTE = computed(() => {
-      let total = 0;
-      resultItems.value.forEach((i) => {
-        total += i.fteSubtotal;
-      });
-
-      return (Math.round(total * 100) / 100).toFixed(3);
+      return items.value.reduce((acc, current) => acc + current.totFTE, 0);
     });
 
     const totalFTEOverPoP = computed(() => {
-      const interm =
-        (parseFloat(totalFTE.value) * totalTaskDuration.value) / 2080;
-      return (Math.round(interm * 1000) / 1000).toFixed(3);
+      return items.value.reduce(
+        (acc, current) => acc + current.totFTEOverPoP,
+        0
+      );
     });
 
     const addTaskDialog = () => {
-      $q.dialog({ component: AddTask }).onOk((newTask: Task) => {
+      $q.dialog({ component: AddTask }).onOk((newTask: TaskItem) => {
+        // Need to set current PoP when a new task is added, defaults to 1 year
+        newTask.PoP = totalTaskDuration.value;
         items.value.push(newTask);
-        console.log('from indec', newTask);
       });
     };
 
+    // Update the PoP on all the items when PoP changes
     watch(
       () => {
         return [taskDurationMeta.value, taskDuration.value];
       },
       () => {
-        resultItems.value.map((i) => {
-          console.log(i.fteSubtotal);
+        items.value.map((i) => {
+          i.PoP = totalTaskDuration.value;
         });
-        // console.log('bingo');
       }
     );
 
@@ -183,12 +160,12 @@ export default defineComponent({
       items,
       listColumns,
       addTaskDialog,
-      resultItems,
       totalFTE,
+      totalFTEOverPoP,
       durationOptions,
       taskDurationMeta,
       taskDuration,
-      totalFTEOverPoP,
+      projectTitle,
     };
   },
 });

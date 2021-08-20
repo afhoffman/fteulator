@@ -31,9 +31,9 @@
 <script lang='ts'>
 import { defineComponent, ref } from 'vue';
 import { useDialogPluginComponent } from 'quasar';
-import { Task } from 'src/models/task';
+import { TaskItem, RepFreq } from 'src/models/task';
 
-const dateOptions = ['day', 'week', 'month', 'year', 'sprint'];
+const dateOptions: RepFreq[] = ['day', 'week', 'month', 'year', 'sprint'];
 
 export default defineComponent({
   props: {
@@ -47,7 +47,8 @@ export default defineComponent({
   ],
 
   setup() {
-    const newTask = ref<Partial<Task>>({ repeatFrequency: 'day' });
+    // const newTask = ref<Partial<Task>>({ repeatFrequency: 'day' });
+    const newTask = ref(new TaskItem());
     const hrs = ref<string>('0');
     const mins = ref<string>('0');
 
@@ -72,7 +73,6 @@ export default defineComponent({
       // these are part of our example (so not required)
       onOKClick() {
         newTask.value.hrs = parseFloat(hrs.value) + parseFloat(mins.value) / 60;
-        newTask.value.hrs = parseFloat(newTask.value.hrs.toPrecision(3));
         console.log(newTask.value);
         // on OK, it is REQUIRED to
         // call onDialogOK (with optional payload)
