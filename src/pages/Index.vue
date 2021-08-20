@@ -3,7 +3,7 @@
   <div class="q-pa-md">
     <div class="row justify-around">
       <q-card class="col col-lg-4 q-mr-sm">
-        <div class="text-h6 text-center q-mb-sm">FTEUlator</div>
+        <div class="text-h6 text-center q-mb-sm">FTE-ulator</div>
         <q-separator class="q-mb-md" />
         <q-card-section class="q-mt-none q-pt-none">
           <q-input label="Project Title" v-model="projectTitle" />
@@ -46,7 +46,7 @@
         </q-card-section>
         <q-card-actions align="center" class="justify-center">
           <q-btn
-            v-if="items.length"
+            v-if="showReset"
             @click="handleReset"
             flat
             color="negative"
@@ -201,6 +201,15 @@ export default defineComponent({
       });
     };
 
+    const showReset = computed(() => {
+      return (
+        items.value.length !== 0 ||
+        projectTitle.value !== '' ||
+        taskDuration.value !== 1 ||
+        taskDurationMeta.value.tag !== durationOptions[0].tag
+      );
+    });
+
     return {
       items,
       listColumns,
@@ -213,6 +222,7 @@ export default defineComponent({
       projectTitle,
       handleRowClick,
       handleReset,
+      showReset,
     };
   },
 });
