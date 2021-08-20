@@ -15,13 +15,13 @@
           />
           <div class="row justify-between">
             <q-input
-              v-model="hrs"
+              v-model.number="hrs"
               type="number"
               @keydown.enter.prevent="onOKClick"
               label="hours"
             />
             <q-input
-              v-model="mins"
+              v-model.number="mins"
               type="number"
               @keydown.enter.prevent="onOKClick"
               label="minutes"
