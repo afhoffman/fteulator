@@ -11,17 +11,20 @@
           <q-input
             v-model="newTask.name"
             @keydown.enter.prevent="onOKClick"
+            data-cy="new-task-name-input"
             label="Name"
           />
           <div class="row justify-between">
             <q-input
               v-model.number="hrs"
+              data-cy="new-task-hrs-input"
               type="number"
               @keydown.enter.prevent="onOKClick"
               label="hours"
             />
             <q-input
               v-model.number="mins"
+              data-cy="new-task-mins-input"
               type="number"
               @keydown.enter.prevent="onOKClick"
               label="minutes"
@@ -29,6 +32,7 @@
           </div>
           <q-select
             label="per"
+            data-cy="new-task-duration-select"
             :options="dateOptions"
             v-model="newTask.repeatFrequency"
           />
@@ -38,11 +42,17 @@
         <div>
           <q-btn
             class="q-mr-sm"
+            data-cy="add-task-submit-button"
             color="primary"
             label="OK"
             @click="onOKClick"
           />
-          <q-btn color="primary" label="Cancel" @click="onCancelClick" />
+          <q-btn
+            color="primary"
+            data-cy="add-task-cancel-button"
+            label="Cancel"
+            @click="onCancelClick"
+          />
         </div>
         <q-btn
           v-if="taskItem"

@@ -2,15 +2,22 @@
   <!-- <div class="column justify-evenly q-pa-md"> -->
   <div class="q-pa-md">
     <div class="row justify-around">
-      <q-card class="col col-lg-4 q-mr-sm">
-        <div class="text-h6 text-center q-mb-sm">FTE-ulator</div>
+      <q-card data-cy="index-main-card" class="col col-lg-4 q-mr-sm">
+        <div class="text-h6 text-center q-mb-sm" data-cy="main-card-title">
+          FTE-ulator
+        </div>
         <q-separator class="q-mb-md" />
         <q-card-section class="q-mt-none q-pt-none">
-          <q-input label="Project Title" v-model="projectTitle" />
+          <q-input
+            label="Project Title"
+            data-cy="index-project-title"
+            v-model="projectTitle"
+          />
           <div class="row items-center">
             <div class="col q-mr-sm">
               <q-input
                 label="Project Duration"
+                data-cy="index-project-duration"
                 type="number"
                 hide-bottom-space
                 v-model="taskDuration"
@@ -19,6 +26,7 @@
             <div class="col q-ml-sm">
               <q-select
                 label-slot
+                data-cy="index-project-meta-select"
                 :options="durationOptions"
                 v-model="taskDurationMeta"
               />
@@ -29,11 +37,15 @@
           <div class="row items-center justify-evenly">
             <div class="row">
               <div class="text-h5">Total FTE:</div>
-              <div class="text-h6 q-ml-md">{{ totalFTE }}</div>
+              <div class="text-h6 q-ml-md" data-cy="index-total-fte">
+                {{ totalFTE }}
+              </div>
             </div>
             <div class="row">
               <div class="text-h5">FTE over PoP:</div>
-              <div class="text-h6 q-ml-md">{{ totalFTEOverPoP }}</div>
+              <div class="text-h6 q-ml-md" data-cy="index-total-fte-over-pop">
+                {{ totalFTEOverPoP }}
+              </div>
             </div>
           </div>
         </q-card-section>
@@ -46,6 +58,7 @@
               row-key="id"
               class="q-pb-none"
               @row-click="handleRowClick"
+              data-cy="index-result-table"
             />
           </q-card-section>
         </q-card-section>
@@ -53,11 +66,18 @@
           <q-btn
             v-if="showReset"
             @click="handleReset"
+            data-cy="index-reset-button"
             flat
             color="negative"
             label="Reset"
           />
-          <q-btn @click="addTaskDialog" label="Add Task" flat color="primary" />
+          <q-btn
+            @click="addTaskDialog"
+            data-cy="add-task-button"
+            label="Add Task"
+            flat
+            color="primary"
+          />
         </q-card-actions>
       </q-card>
     </div>
