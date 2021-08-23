@@ -38,13 +38,13 @@
             <div class="row">
               <div class="text-h5">Total FTE:</div>
               <div class="text-h6 q-ml-md" data-cy="index-total-fte">
-                {{ totalFTE }}
+                {{ formattedTotalFTE() }}
               </div>
             </div>
             <div class="row">
               <div class="text-h5">FTE over PoP:</div>
               <div class="text-h6 q-ml-md" data-cy="index-total-fte-over-pop">
-                {{ totalFTEOverPoP }}
+                {{ formattedTotalFTEOverPoP() }}
               </div>
             </div>
           </div>
@@ -239,8 +239,12 @@ export default defineComponent({
       items,
       listColumns,
       addTaskDialog,
-      totalFTE,
-      totalFTEOverPoP,
+      formattedTotalFTE() {
+        return filterLowNumber(totalFTE.value);
+      },
+      formattedTotalFTEOverPoP() {
+        return filterLowNumber(totalFTEOverPoP.value);
+      },
       durationOptions,
       taskDurationMeta,
       taskDuration,
