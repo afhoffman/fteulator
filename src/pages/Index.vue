@@ -1,8 +1,8 @@
 <template>
   <!-- <div class="column justify-evenly q-pa-md"> -->
-  <div class="q-pa-md">
-    <div class="row justify-around">
-      <q-card data-cy="index-main-card" class="col col-lg-4 q-mr-sm">
+  <q-page class="q-pa-md">
+    <div class="row justify-center">
+      <q-card data-cy="index-main-card" class="col col-lg-4">
         <div class="text-h6 text-center q-mb-sm" data-cy="main-card-title">
           FTE-ulator
         </div>
@@ -81,7 +81,7 @@
         </q-card-actions>
       </q-card>
     </div>
-  </div>
+  </q-page>
 </template>
 
 
