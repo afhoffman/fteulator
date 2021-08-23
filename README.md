@@ -1,12 +1,25 @@
 # FTEUlator
 
-This is a simple tool to help Full Time Equivalent (FTE) estimation. Some
-assumptions that are made throughout:
+This is a simple tool to help Full Time Equivalent (FTE) estimation. The intent
+is to think through activities involved with a project or duty, add them
+individually, and get some idea of what the FTE estimate is.
+
+A known issue is that the table will not allow you to add more than 5 activities
+at a time. You can add them, but they won't be displayed. Doing more than 5
+things is ill-advised, anyway. For now, the "project name" field is only
+cosmetic with the intent of make it easier to add some sort of import/export functionality
+in the future.
+
+Some assumptions that are made throughout:
 
 - 1 FTE = 2080 hours
 - 1 Month = 2080/12 =
   173 1/3 hours
 - 1 Sprint = 2 weeks = 80 hours.
+- PoP = Period of Performance = project duration in hours.
+
+An activity that is 8 hours per day for 1 year is 1 FTE. If the project lasts 6
+months, the total effort for that activity over the period of performance is 0.5 FTE.
 
 The application can be run as a single page application (SPA) or Progressive Web
 Application (PWA) via Quasar, as a native desktop application (Linux, mac,
