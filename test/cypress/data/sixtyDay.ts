@@ -1,7 +1,7 @@
 import { MultipleProjectDurations } from '../data/models';
 
 export const sixtyDayData: MultipleProjectDurations = {
-  title: '60 Day',
+  title: '60 Day Project',
   length: '60',
   lengthMeta: 'day(s)',
   tasks: [
