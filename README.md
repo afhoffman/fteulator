@@ -73,7 +73,8 @@ server, like Nginx.
 
 Tauri is a Rust-based alternative to Electron with the main advantages being
 better memory management and smaller bundle size. This application should be
-~7MB when compiled with Tauri compared to ~53MB when compiled with Electron.
+~7MB when compiled with Tauri compared to ~53MB when compiled with Electron on
+Windows. For whatever reason, the Tauri `.AppImage` on Linux is still large.
 
 Tauri is still in beta right now, but is reasonably usable and maturing quickly.
 See their roadmap at [https://tauri.studio/en/](https://tauri.studio/en/)
