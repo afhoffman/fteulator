@@ -13,6 +13,74 @@
 //   });
 // });
 
+type RepeatFreq = 'day' | 'week' | 'month' | 'sprint' | 'year';
+
+type TestInputsAndOutputs = {
+  name: string;
+  durationHrs: string;
+  durationMins: string;
+  repeatFreq: RepeatFreq;
+  output: {
+    hrs: string;
+    repeat: RepeatFreq;
+    fte: string;
+    fteOverPoP: string;
+  };
+};
+
+const sixMonthTasks: TestInputsAndOutputs[] = [
+  {
+    name: 'New Task 1',
+    durationHrs: '4',
+    durationMins: '15',
+    repeatFreq: 'day',
+    output: { hrs: '4.250', repeat: 'day', fte: '0.53', fteOverPoP: '0.265' },
+  },
+  {
+    name: 'New Task 2',
+    durationHrs: '2',
+    durationMins: '0',
+    repeatFreq: 'week',
+    output: { hrs: '2.000', repeat: 'week', fte: '0.050', fteOverPoP: '0.025' },
+  },
+  {
+    name: 'New Task 3',
+    durationHrs: '10',
+    durationMins: '0',
+    repeatFreq: 'month',
+    output: {
+      hrs: '10.000',
+      repeat: 'month',
+      fte: '0.060',
+      fteOverPoP: '0.030',
+    },
+  },
+  {
+    name: 'New Task 4',
+    durationHrs: '100',
+    durationMins: '0',
+    repeatFreq: 'year',
+    output: {
+      hrs: '100.000',
+      repeat: 'year',
+      fte: '0.050',
+      fteOverPoP: '0.025',
+    },
+  },
+  {
+    name: 'New Task 5',
+    durationHrs: '8',
+    durationMins: '0',
+    repeatFreq: 'sprint',
+    output: {
+      hrs: '8.000',
+      repeat: 'sprint',
+      fte: '0.100',
+      fteOverPoP: '0.050',
+    },
+  },
+];
+
 describe('Initial Load', () => {
   beforeEach(() => {
     cy.visit('/');
@@ -65,221 +133,57 @@ describe('Set project duration, add task, check values, reset', () => {
     cy.dataCy('add-task-cancel-button').click();
   });
 
-  it('Add 4.25hr per day task', () => {
-    const taskName = 'New Task 1';
-    cy.dataCy('add-task-button').click();
-    // cy.dataCy('add-task-button').click();
-    cy.dataCy('new-task-name-input')
-      .type(taskName)
-      .should('contain.value', taskName);
-    cy.dataCy('new-task-hrs-input')
-      .clear()
-      .type('4')
-      .should('contain.value', '4');
-    cy.dataCy('new-task-mins-input')
-      .clear()
-      .type('15')
-      .should('contain.value', '15');
-    cy.dataCy('add-task-submit-button').click();
-    cy.dataCy('index-total-fte').should('contain', '0.53');
-    cy.dataCy('index-total-fte-over-pop').should('contain', '0.265');
+  for (const testTask of sixMonthTasks) {
+    it(`Add ${testTask.output.hrs}hr per ${testTask.repeatFreq} task`, () => {
+      console.log(testTask.name);
+      cy.dataCy('add-task-button').click();
+      // cy.dataCy('add-task-button').click();
+      cy.dataCy('new-task-name-input')
+        .type(testTask.name)
+        .should('contain.value', testTask.name);
+      cy.dataCy('new-task-hrs-input')
+        .clear()
+        .type(testTask.durationHrs)
+        .should('contain.value', testTask.durationHrs);
+      cy.dataCy('new-task-mins-input')
+        .clear()
+        .type(testTask.durationMins)
+        .should('contain.value', testTask.durationMins);
+      cy.dataCy('new-task-duration-select').click();
+      cy.get('.q-item__label').contains(testTask.repeatFreq).click();
+      cy.dataCy('new-task-duration-select')
+        .children('span')
+        .should('contain', testTask.repeatFreq);
+      cy.dataCy('add-task-submit-button').click();
 
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(1)
-      .should('contain', '4.250');
+      cy.get('.q-table > tbody > tr')
+        .contains('tr', testTask.name)
+        .children()
+        .eq(1)
+        .should('contain', testTask.output.hrs);
 
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(2)
-      .should('contain', 'day');
+      cy.get('.q-table > tbody > tr')
+        .contains('tr', testTask.name)
+        .children()
+        .eq(2)
+        .should('contain', testTask.output.repeat);
 
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(3)
-      .should('contain', '0.530');
+      cy.get('.q-table > tbody > tr')
+        .contains('tr', testTask.name)
+        .children()
+        .eq(3)
+        .should('contain', testTask.output.fte);
 
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(4)
-      .should('contain', '0.265');
-  });
+      cy.get('.q-table > tbody > tr')
+        .contains('tr', testTask.name)
+        .children()
+        .eq(4)
+        .should('contain', testTask.output.fteOverPoP);
+    });
+  }
 
-  it('Has result table after first entry', () => {
+  it('Has result table after adding data', () => {
     cy.dataCy('index-result-table').should('exist');
-  });
-
-  it('Can add 2hr per week task', () => {
-    const taskName = 'New Task 2';
-    cy.dataCy('add-task-button').click();
-    cy.dataCy('new-task-name-input')
-      .type(taskName)
-      .should('contain.value', taskName);
-    cy.dataCy('new-task-hrs-input')
-      .clear()
-      .type('2')
-      .should('contain.value', '2');
-    cy.dataCy('new-task-duration-select').click();
-    cy.get('.q-item__label').contains('week').click();
-    cy.dataCy('new-task-duration-select')
-      .children('span')
-      .should('contain', 'week');
-    cy.dataCy('add-task-submit-button').click();
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(1)
-      .should('contain', '2.000');
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(2)
-      .should('contain', 'week');
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(3)
-      .should('contain', '0.050');
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(4)
-      .should('contain', '0.025');
-  });
-
-  it('Can add 10hr per month task', () => {
-    const taskName = 'New Task 3';
-
-    cy.dataCy('add-task-button').click();
-    cy.dataCy('new-task-name-input')
-      .type(taskName)
-      .should('contain.value', taskName);
-    cy.dataCy('new-task-hrs-input')
-      .clear()
-      .type('10')
-      .should('contain.value', '10');
-    cy.dataCy('new-task-duration-select').click();
-    cy.get('.q-item__label').contains('month').click();
-    cy.dataCy('new-task-duration-select')
-      .children('span')
-      .should('contain', 'month');
-    cy.dataCy('add-task-submit-button').click();
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(1)
-      .should('contain', '10');
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(2)
-      .should('contain', 'month');
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(3)
-      .should('contain', '0.060');
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(4)
-      .should('contain', '0.030');
-  });
-
-  it('Can add 100hr per year task', () => {
-    const taskName = 'New Task 4';
-
-    cy.dataCy('add-task-button').click();
-    cy.dataCy('new-task-name-input')
-      .type(taskName)
-      .should('contain.value', taskName);
-    cy.dataCy('new-task-hrs-input')
-      .clear()
-      .type('100')
-      .should('contain.value', '100');
-    cy.dataCy('new-task-duration-select').click();
-    cy.get('.q-item__label').contains('year').click();
-    cy.dataCy('new-task-duration-select')
-      .children('span')
-      .should('contain', 'year');
-    cy.dataCy('add-task-submit-button').click();
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(1)
-      .should('contain', '100.000');
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(2)
-      .should('contain', 'year');
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(3)
-      .should('contain', '0.050');
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(4)
-      .should('contain', '0.025');
-  });
-  it('Can add 8hr per sprint task', () => {
-    const taskName = 'New Task 5';
-    cy.dataCy('add-task-button').click();
-    cy.dataCy('new-task-name-input')
-      .type(taskName)
-      .should('contain.value', taskName);
-    cy.dataCy('new-task-hrs-input')
-      .clear()
-      .type('8')
-      .should('contain.value', '8');
-    cy.dataCy('new-task-duration-select').click();
-    cy.get('.q-item__label').contains('sprint').click();
-    cy.dataCy('new-task-duration-select')
-      .children('span')
-      .should('contain', 'sprint');
-    cy.dataCy('add-task-submit-button').click();
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(1)
-      .should('contain', '8.000');
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(2)
-      .should('contain', 'sprint');
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(3)
-      .should('contain', '0.100');
-
-    cy.get('.q-table > tbody > tr')
-      .contains('tr', taskName)
-      .children()
-      .eq(4)
-      .should('contain', '0.050');
   });
 
   it('Can reset the form', () => {
@@ -296,29 +200,3 @@ describe('Set project duration, add task, check values, reset', () => {
     cy.dataCy('index-result-table').should('not.exist');
   });
 });
-
-// ** The following code is an example to show you how to write some tests for your home page **
-//
-// describe('Home page tests', () => {
-//   beforeEach(() => {
-//     cy.visit('/');
-//   });
-//   it('has pretty background', () => {
-//     cy.dataCy('landing-wrapper')
-//       .should('have.css', 'background')
-//       .and('match', /(".+(\/img\/background).+\.png)/);
-//   });
-//   it('has pretty logo', () => {
-//     cy.dataCy('landing-wrapper img')
-//       .should('have.class', 'logo-main')
-//       .and('have.attr', 'src')
-//       .and('match', /^(data:image\/svg\+xml).+/);
-//   });
-//   it('has very important information', () => {
-//     cy.dataCy('instruction-wrapper')
-//       .should('contain', 'SETUP INSTRUCTIONS')
-//       .and('contain', 'Configure Authentication')
-//       .and('contain', 'Database Configuration and CRUD operations')
-//       .and('contain', 'Continuous Integration & Continuous Deployment CI/CD');
-//   });
-// });
