@@ -9,7 +9,7 @@ assumptions that are made throughout:
 - 1 Sprint = 2 weeks = 80 hours.
 
 The application can be run as a single page application (SPA) or Progressive Web
-Application (PWA) via Quasar, as a native desktop application (linux, mac,
+Application (PWA) via Quasar, as a native desktop application (Linux, mac,
 windows) via Electron or Tauri, and as a mobile app (iOS, Android) via Cordova
 or Capacitor. The component framework is Vue 3, end-to-end testing via Cypress,
 and uses TypeScript throughout.
