@@ -63,8 +63,12 @@
             :rows-per-page-options="[0]"
           />
         </q-card-section>
-        <q-card-section v-else
-          ><div class="text-h5 text-center">Add a task...</div></q-card-section
+        <q-card-section
+          class="row q-ma-none text-center table-placeholder items-center"
+          v-else
+          ><div class="col text-h5 text-center">
+            Add a task...
+          </div></q-card-section
         >
         <q-card-actions align="center" class="justify-center">
           <q-btn
@@ -268,6 +272,10 @@ export default defineComponent({
 .q-card {
   background-color: $grey-1;
   color: $grey-8;
+}
+
+.table-placeholder {
+  height: 428px;
 }
 
 .sticky-table-header {
