@@ -4,6 +4,8 @@ export const sixtyDayData: MultipleProjectDurations = {
   title: '60 Day Project',
   length: '60',
   lengthMeta: 'day(s)',
+  totalFte: '0.790',
+  totalFteOverPoP: '0.183',
   tasks: [
     {
       name: 'New Task 1',

@@ -1,18 +1,6 @@
 // Use `cy.dataCy` custom command for more robust tests
 // See https://docs.cypress.io/guides/references/best-practices.html#Selecting-Elements
 
-// ** This file is an example of how to write Cypress tests, you can safely delete it **
-
-// This test will pass when run against a clean Quasar project
-// describe('Landing', () => {
-//   beforeEach(() => {
-//     cy.visit('/');
-//   });
-//   it('.should() - assert that <title> is correct', () => {
-//     cy.title().should('include', 'fte');
-//   });
-// });
-
 import { MultipleProjectDurations } from '../data/models';
 import { sixMonthData } from '../data/sixMonth';
 import { fourSprintData } from '../data/fourSprint';
@@ -72,20 +60,22 @@ for (const $data of projectDurationData) {
 
     for (const testTask of $data.tasks) {
       it(`Add ${testTask.output.hrs} hr per ${testTask.repeatFreq} task`, () => {
-        console.log(testTask.name);
         cy.dataCy('add-task-button').click();
-        // cy.dataCy('add-task-button').click();
+
         cy.dataCy('new-task-name-input')
           .type(testTask.name)
           .should('contain.value', testTask.name);
+
         cy.dataCy('new-task-hrs-input')
           .clear()
           .type(testTask.durationHrs)
           .should('contain.value', testTask.durationHrs);
+
         cy.dataCy('new-task-mins-input')
           .clear()
           .type(testTask.durationMins)
           .should('contain.value', testTask.durationMins);
+
         cy.dataCy('new-task-duration-select').click();
         cy.get('.q-item__label').contains(testTask.repeatFreq).click();
         cy.dataCy('new-task-duration-select')
@@ -97,27 +87,34 @@ for (const $data of projectDurationData) {
           .contains('tr', testTask.name)
           .children()
           .eq(1)
-          .should('contain', testTask.output.hrs);
+          .should('have.text', testTask.output.hrs);
 
         cy.get('.q-table > tbody > tr')
           .contains('tr', testTask.name)
           .children()
           .eq(2)
-          .should('contain', testTask.output.repeat);
+          .should('have.text', testTask.output.repeat);
 
         cy.get('.q-table > tbody > tr')
           .contains('tr', testTask.name)
           .children()
           .eq(3)
-          .should('contain', testTask.output.fte);
+          .should('have.text', testTask.output.fte);
 
         cy.get('.q-table > tbody > tr')
           .contains('tr', testTask.name)
           .children()
           .eq(4)
-          .should('contain', testTask.output.fteOverPoP);
+          .should('have.text', testTask.output.fteOverPoP);
       });
     }
+    it('Has the right FTE Totals', () => {
+      cy.dataCy('index-total-fte').should('have.text', $data.totalFte);
+      cy.dataCy('index-total-fte-over-pop').should(
+        'have.text',
+        $data.totalFteOverPoP
+      );
+    });
     it('Can reset the form', () => {
       cy.dataCy('index-reset-button').click();
       cy.get('button').contains('OK').click();

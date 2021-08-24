@@ -4,6 +4,8 @@ export const fourSprintData: MultipleProjectDurations = {
   title: 'Four Sprint Project',
   length: '4',
   lengthMeta: 'sprint(s)',
+  totalFte: '0.790',
+  totalFteOverPoP: '0.122',
   tasks: [
     {
       name: 'New Task 1',

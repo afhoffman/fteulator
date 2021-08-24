@@ -18,4 +18,6 @@ export type MultipleProjectDurations = {
   length: string;
   lengthMeta: 'year(s)' | 'month(s)' | 'week(s)' | 'sprint(s)' | 'day(s)';
   tasks: TestInputsAndOutputs[];
+  totalFte: string;
+  totalFteOverPoP: string;
 };

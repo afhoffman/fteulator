@@ -4,6 +4,8 @@ export const oneYearData: MultipleProjectDurations = {
   title: 'One Year Project',
   length: '1',
   lengthMeta: 'year(s)',
+  totalFte: '0.790',
+  totalFteOverPoP: '0.790',
   tasks: [
     {
       name: 'New Task 1',

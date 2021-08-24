@@ -4,13 +4,20 @@ export const sixMonthData: MultipleProjectDurations = {
   title: 'Six Month Project',
   length: '6',
   lengthMeta: 'month(s)',
+  totalFte: '0.790',
+  totalFteOverPoP: '0.395',
   tasks: [
     {
       name: 'New Task 1',
       durationHrs: '4',
       durationMins: '15',
       repeatFreq: 'day',
-      output: { hrs: '4.250', repeat: 'day', fte: '0.53', fteOverPoP: '0.265' },
+      output: {
+        hrs: '4.250',
+        repeat: 'day',
+        fte: '0.530',
+        fteOverPoP: '0.265',
+      },
     },
     {
       name: 'New Task 2',
