@@ -2,7 +2,7 @@
   <!-- <div class="column justify-evenly q-pa-md"> -->
   <q-page class="q-pa-md">
     <div class="row justify-center">
-      <q-card data-cy="index-main-card" class="col col-lg-4">
+      <q-card data-cy="index-main-card" class="col col-lg-6">
         <div class="text-h6 text-center q-mb-sm" data-cy="main-card-title">
           FTE-ulator
         </div>
@@ -34,17 +34,17 @@
           </div>
         </q-card-section>
         <q-card-section v-if="items.length">
-          <div class="row items-center justify-evenly">
-            <div class="row">
-              <div class="text-h5">Total FTE:</div>
-              <div class="text-h6 q-ml-md" data-cy="index-total-fte">
-                {{ formattedTotalFTE() }}
+          <div class="row items-center justify-center">
+            <div class="col text-center">
+              <div class="text-h5">FTE</div>
+              <div class="text-h6" data-cy="index-total-fte-over-pop">
+                {{ formattedTotalFTEOverPoP() }}
               </div>
             </div>
-            <div class="row">
-              <div class="text-h5">FTE over PoP:</div>
-              <div class="text-h6 q-ml-md" data-cy="index-total-fte-over-pop">
-                {{ formattedTotalFTEOverPoP() }}
+            <div class="col text-center">
+              <div class="text-h5">Max FTE</div>
+              <div class="text-h6" data-cy="index-max-fte-over-pop">
+                {{ formattedMaxFTEOverPoP() }}
               </div>
             </div>
           </div>
@@ -123,14 +123,14 @@ const listColumns = [
   },
   {
     name: 'FTE',
-    label: 'FTE',
+    label: 'FTE - 1yr',
     sortable: true,
     field: 'totFTE',
     format: filterLowNumber,
   },
   {
-    name: 'FTE - PoP',
-    label: 'FTE - PoP',
+    name: 'FTE',
+    label: 'FTE',
     sortable: true,
     field: 'totFTEOverPoP',
     format: filterLowNumber,
@@ -244,6 +244,9 @@ export default defineComponent({
       },
       formattedTotalFTEOverPoP() {
         return filterLowNumber(totalFTEOverPoP.value);
+      },
+      formattedMaxFTEOverPoP() {
+        return filterLowNumber(totalTaskDuration.value / 2080);
       },
       durationOptions,
       taskDurationMeta,

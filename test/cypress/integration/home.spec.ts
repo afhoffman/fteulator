@@ -181,7 +181,6 @@ for (const $data of projectDurationData) {
       });
     }
     it('Has the right FTE Totals', () => {
-      cy.dataCy('index-total-fte').should('have.text', $data.totalFte);
       cy.dataCy('index-total-fte-over-pop').should(
         'have.text',
         $data.totalFteOverPoP
