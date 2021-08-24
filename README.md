@@ -4,9 +4,8 @@ This is a simple tool to help Full Time Equivalent (FTE) estimation. The intent
 is to think through activities involved with a project or duty, add them
 individually, and get some idea of what the FTE estimate is.
 
-A known issue is that the table will not allow you to add more than 5 activities
-at a time. You can add them, but they won't be displayed. Doing more than 5
-things is ill-advised, anyway. For now, the "project name" field is only
+Doing more than 5 things is ill-advised, but adding more than 5 items will turn
+the table into a virtual scroll area with sticky header. For now, the "project name" field is only
 cosmetic with the intent of make it easier to add some sort of import/export functionality
 in the future.
 
@@ -74,7 +73,8 @@ server, like Nginx.
 Tauri is a Rust-based alternative to Electron with the main advantages being
 better memory management and smaller bundle size. This application should be
 ~7MB when compiled with Tauri compared to ~53MB when compiled with Electron on
-Windows. For whatever reason, the Tauri `.AppImage` on Linux is still large.
+Windows. The Tauri `.AppImage` on Linux is still large because it pulls in a lot
+of dependencies. The `.deb` is a much more reasonable size, but untested so far.
 
 Tauri is still in beta right now, but is reasonably usable and maturing quickly.
 See their roadmap at [https://tauri.studio/en/](https://tauri.studio/en/)
