@@ -1,6 +1,6 @@
 {
   "name": "fteulator",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Simple calculator for estimating FTEs",
   "productName": "FTEUlator",
   "author": "Aaron Hoffman <kd0sgh@gmail.com>",
