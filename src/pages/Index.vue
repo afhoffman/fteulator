@@ -49,19 +49,23 @@
             </div>
           </div>
         </q-card-section>
-        <q-card-section>
-          <q-card-section class="q-pa-none q-ma-none" v-if="items.length">
-            <q-table
-              :rows="items"
-              :columns="listColumns"
-              hide-bottom
-              row-key="id"
-              class="q-pb-none"
-              @row-click="handleRowClick"
-              data-cy="index-result-table"
-            />
-          </q-card-section>
+        <q-card-section v-if="items.length">
+          <q-table
+            class="q-pb-none sticky-table-header"
+            virtual-scroll
+            :virtual-scroll-sticky-size-start="48"
+            :rows="items"
+            :columns="listColumns"
+            row-key="id"
+            hide-bottom
+            @row-click="handleRowClick"
+            data-cy="index-result-table"
+            :rows-per-page-options="[0]"
+          />
         </q-card-section>
+        <q-card-section v-else
+          ><div class="text-h5 text-center">Add a task...</div></q-card-section
+        >
         <q-card-actions align="center" class="justify-center">
           <q-btn
             v-if="showReset"
@@ -264,5 +268,28 @@ export default defineComponent({
 .q-card {
   background-color: $grey-1;
   color: $grey-8;
+}
+
+.sticky-table-header {
+  height: 300px;
+
+  .q-table__top,
+  .q-table__bottom,
+  thead tr:first-child th {
+    background-color: $grey-3;
+  } /* bg color is important for th; just specify one */
+
+  thead tr th {
+    position: sticky;
+    z-index: 1;
+  }
+  /* this will be the loading indicator */
+  thead tr:last-child th {
+    /* height of all previous header rows */
+    top: 48px;
+  }
+  thead tr:first-child th {
+    top: 0;
+  }
 }
 </style>
