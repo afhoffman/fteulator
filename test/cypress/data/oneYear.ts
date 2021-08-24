@@ -4,8 +4,8 @@ export const oneYearData: MultipleProjectDurations = {
   title: 'One Year Project',
   length: '1',
   lengthMeta: 'year(s)',
-  totalFte: '0.790',
-  totalFteOverPoP: '0.790',
+  totalFte: '0.820',
+  totalFteOverPoP: '0.820',
   tasks: [
     {
       name: 'New Task 1',
@@ -65,6 +65,18 @@ export const oneYearData: MultipleProjectDurations = {
         repeat: 'sprint',
         fte: '0.100',
         fteOverPoP: '0.100',
+      },
+    },
+    {
+      name: 'New Task 6',
+      durationHrs: '2',
+      durationMins: '30',
+      repeatFreq: 'sprint',
+      output: {
+        hrs: '2.500',
+        repeat: 'sprint',
+        fte: '0.030',
+        fteOverPoP: '0.030',
       },
     },
   ],
