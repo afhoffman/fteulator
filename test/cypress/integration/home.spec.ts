@@ -66,6 +66,7 @@ describe('Can Edit And Delete Task', () => {
   it('Edit task', () => {
     cy.get('tbody > :nth-child(1) > .text-left').click();
 
+    cy.dataCy('new-task-name-input').clear().type('Changed Task');
     cy.dataCy('new-task-hrs-input').clear().type('2');
     cy.dataCy('new-task-mins-input').clear().type('10');
     cy.dataCy('new-task-duration-select').click();
@@ -74,25 +75,25 @@ describe('Can Edit And Delete Task', () => {
     cy.dataCy('add-task-submit-button').click();
 
     cy.get('.q-table > tbody > tr')
-      .contains('tr', testTask.name)
+      .contains('tr', 'Changed Task')
       .children()
       .eq(1)
       .should('have.text', '2.167');
 
     cy.get('.q-table > tbody > tr')
-      .contains('tr', testTask.name)
+      .contains('tr', 'Changed Task')
       .children()
       .eq(2)
       .should('have.text', 'week');
 
     cy.get('.q-table > tbody > tr')
-      .contains('tr', testTask.name)
+      .contains('tr', 'Changed Task')
       .children()
       .eq(3)
       .should('have.text', '0.050');
 
     cy.get('.q-table > tbody > tr')
-      .contains('tr', testTask.name)
+      .contains('tr', 'Changed Task')
       .children()
       .eq(4)
       .should('have.text', '0.050');
