@@ -35,49 +35,74 @@ describe('Initial Load', () => {
 });
 
 describe('Can Edit And Delete Task', () => {
-  const $data = projectDurationData[0];
-  for (const testTask of $data.tasks.slice(0, 1)) {
-    it(`Add ${testTask.output.hrs} hr per ${testTask.repeatFreq} task`, () => {
-      cy.dataCy('add-task-button').click();
+  const testTask = projectDurationData[0].tasks[0];
 
-      cy.dataCy('new-task-name-input')
-        .type(testTask.name)
-        .should('contain.value', testTask.name);
+  it('Add task', () => {
+    cy.dataCy('add-task-button').click();
 
-      cy.dataCy('new-task-hrs-input')
-        .clear()
-        .type(testTask.durationHrs)
-        .should('contain.value', testTask.durationHrs);
+    cy.dataCy('new-task-name-input')
+      .type(testTask.name)
+      .should('contain.value', testTask.name);
 
-      cy.dataCy('new-task-mins-input')
-        .clear()
-        .type(testTask.durationMins)
-        .should('contain.value', testTask.durationMins);
+    cy.dataCy('new-task-hrs-input')
+      .clear()
+      .type(testTask.durationHrs)
+      .should('contain.value', testTask.durationHrs);
 
-      cy.dataCy('new-task-duration-select').click();
-      cy.get('.q-item__label').contains(testTask.repeatFreq).click();
-      cy.dataCy('new-task-duration-select')
-        .children('span')
-        .should('contain', testTask.repeatFreq);
-      cy.dataCy('add-task-submit-button').click();
-      cy.dataCy('index-result-table').should('exist');
+    cy.dataCy('new-task-mins-input')
+      .clear()
+      .type(testTask.durationMins)
+      .should('contain.value', testTask.durationMins);
 
-      cy.get('tbody > :nth-child(1) > .text-left').click();
+    cy.dataCy('new-task-duration-select').click();
+    cy.get('.q-item__label').contains(testTask.repeatFreq).click();
+    cy.dataCy('new-task-duration-select')
+      .children('span')
+      .should('contain', testTask.repeatFreq);
+    cy.dataCy('add-task-submit-button').click();
+    cy.dataCy('index-result-table').should('exist');
+  });
 
-      cy.dataCy('new-task-hrs-input').clear().type('2');
-      cy.get('button').contains('OK').click();
+  it('Edit task', () => {
+    cy.get('tbody > :nth-child(1) > .text-left').click();
 
-      cy.get('.q-table > tbody > tr')
-        .contains('tr', testTask.name)
-        .children()
-        .eq(1)
-        .should('have.text', '2.250');
+    cy.dataCy('new-task-hrs-input').clear().type('2');
+    cy.dataCy('new-task-mins-input').clear().type('10');
+    cy.dataCy('new-task-duration-select').click();
+    cy.get('.q-item__label').contains('week').click();
+    cy.get('button').contains('OK').click();
+    cy.dataCy('add-task-submit-button').click();
 
-      cy.get('tbody > :nth-child(1) > .text-left').click();
-      cy.get('button').contains('Delete').click();
-      cy.dataCy('index-result-table').should('not.exist');
-    });
-  }
+    cy.get('.q-table > tbody > tr')
+      .contains('tr', testTask.name)
+      .children()
+      .eq(1)
+      .should('have.text', '2.167');
+
+    cy.get('.q-table > tbody > tr')
+      .contains('tr', testTask.name)
+      .children()
+      .eq(2)
+      .should('have.text', 'week');
+
+    cy.get('.q-table > tbody > tr')
+      .contains('tr', testTask.name)
+      .children()
+      .eq(3)
+      .should('have.text', '0.050');
+
+    cy.get('.q-table > tbody > tr')
+      .contains('tr', testTask.name)
+      .children()
+      .eq(4)
+      .should('have.text', '0.050');
+  });
+
+  it('Delete task', () => {
+    cy.get('tbody > :nth-child(1) > .text-left').click();
+    cy.get('button').contains('Delete').click();
+    cy.dataCy('index-result-table').should('not.exist');
+  });
 });
 
 for (const $data of projectDurationData) {
