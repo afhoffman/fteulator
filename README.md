@@ -14,7 +14,7 @@ Some assumptions that are made throughout:
 - 1 FTE = 2080 hours
 - 1 Month = 2080/12 =
   173 1/3 hours
-- 1 Sprint = 2 weeks = 80 hours.
+- 1 Sprint = 2 weeks = 10 working days = 80 hours.
 - PoP = Period of Performance = project duration in hours.
 
 An activity that is 8 hours per day for 1 year is 1 FTE. If the project lasts 6
